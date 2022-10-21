@@ -1,5 +1,4 @@
-let merr="https://www.merriam-webster.com/dictionary/";
-let words = [];
+let merr = "https://www.merriam-webster.com/dictionary/";
 let pp = localStorage.getItem("str_words");
 pp = JSON.parse(pp);
 let temp = "";
@@ -11,58 +10,64 @@ const removeallbtn = document.getElementById("button-removeall");
 const savetabbtn = document.getElementById("button-savetab");
 const un_li = document.querySelector("#unordered-list");
 
+let flag=true;
+
 render2();
 inputel.focus();
 
-extractbtn.addEventListener("click",function(){
-    inputel.value=JSON.stringify(pp);
-    inputel.value=pp;
+extractbtn.addEventListener("click", function () {
+    inputel.value = JSON.stringify(pp);
+    inputel.value = pp;
 })
 submitbtn.addEventListener("click", function () {
     let tex = inputel.value;
-    if (pp != null) {
-        pp.push(tex);
+    if (tex!=""){
+        if (pp != null) {
+            pp.push(tex);
+        }
+        else {
+            pp=[];
+            pp.push(tex);
+        }
+        inputel.value = "";
+        localStorage.setItem("str_words", JSON.stringify(pp));
+        render2();
+        if (flag){
+           document.getElementById(`word_${tex}`).click();
+        } 
     }
-    else{
-        words.push(tex);
-        pp=words;
-        words=[];
-    }
-    inputel.value = "";
-    localStorage.setItem("str_words",JSON.stringify(pp));
-    render2();
     inputel.focus();
+    flag=true;
 })
 inputel.addEventListener("keypress", function (event) {
-    if (event.key==="Enter"){
-        let tempwo = inputel.value;
+    if (event.key === "Enter") {
+        flag=false;
         submitbtn.click();
-        document.getElementById(`word_${tempwo}`).click();
     }
 })
 
-removebtn.addEventListener("click",function(){
+removebtn.addEventListener("click", function () {
     let tex = inputel.value;
     if (pp != null) {
-        for (let i=0;i<pp.length;i++){
-            if (pp[i]==tex){
-                for(let j=i;j<pp.length -1;j++){
-                    pp[j]=pp[j+1];
+        for (let i = 0; i < pp.length; i++) {
+            if (pp[i] == tex) {
+                for (let j = i; j < pp.length - 1; j++) {
+                    pp[j] = pp[j + 1];
                 }
                 pp.pop();
-                i=pp.length;
+                i = pp.length;
             }
         }
     }
     inputel.value = "";
-    localStorage.setItem("str_words",JSON.stringify(pp));
+    localStorage.setItem("str_words", JSON.stringify(pp));
     render2();
-    
+
 })
 
-removeallbtn.addEventListener("dblclick",function(){
+removeallbtn.addEventListener("dblclick", function () {
     localStorage.clear();
-    pp=[];
+    pp = [];
     render2();
 })
 /*
@@ -86,9 +91,9 @@ savetabbtn.addEventListener("click",function(){
 })
 */
 function render2() {
-    temp="";
-    if (pp!=null){
-        for (let i = pp.length -1; i >=0; i--) {
+    temp = "";
+    if (pp != null) {
+        for (let i = pp.length - 1; i >= 0; i--) {
             // temp+="<li> <a href='"+ words[i]+"' target='_blank'> " + words[i] + "</a> </li>";
             temp += `<li>
                      <a id="word_${pp[i]}" href="${merr}${pp[i]}" target="_blank">
@@ -100,8 +105,3 @@ function render2() {
         un_li.innerHTML = temp;
     }
 }
-/*
-const li=document.creatElement("li");
-li.textContent=words[i];
-un_li.append(li);
-*/
